@@ -28,3 +28,20 @@ body{background-color:var(--portfolio-canvas)}
 .hero em{color:#f2c66a}.orb{color:#f2c66a;border-color:#b9914c}
 
 #policy-settings{background-color:var(--portfolio-accent)!important;color:#fff!important}.hero{background:linear-gradient(110deg,#27271f,#40351e 72%,#66501f)!important}.hero em{color:#f2c66a}.orb{color:#f2c66a;border-color:#b9914c}
+
+/* Keep the wordmark and avatar; the action queue owns the navigation context. */
+aside{position:relative;inset:auto;width:100%;height:62px;flex-direction:row;justify-content:space-between;gap:0;padding:0 max(22px,calc((100vw - 1220px)/2));border-right:0;border-bottom:1px solid #e8e7e1;box-shadow:none}
+aside>div:not(.logo):not(.bottom){display:none}
+main{margin-left:0!important;width:min(1220px,calc(100% - 48px));max-width:1220px;margin-inline:auto!important;padding:28px 0}
+@media(max-width:700px){aside{height:56px;padding:0 16px}main{width:calc(100% - 28px);padding:20px 0}}
+
+
+/* Editorial navigation and restrained surfaces */
+body{background-image:none!important}.hero{background:#f0eee7!important;color:#263128!important;box-shadow:none!important}.hero h2{color:#263128}.hero em{color:#705016!important}.orb{display:none!important}.hero{min-height:150px}
+.panel,.changes-panel,.history-panel,.ticket-column,.detail,.knowledge,.preview-panel{box-shadow:none!important}
+
+aside{background:#fff!important;color:#58604f!important;border-bottom:1px solid #e5e2d9!important}
+.logo{font:800 19px Manrope!important;color:var(--portfolio-accent)!important;margin:0!important}
+.bottom{background:#f0eee7!important;color:#58604f!important}
+#propose{background:var(--portfolio-accent)!important;color:#fff!important}
+.hero .live{color:#705016!important}.hero p{color:#68675f!important}
