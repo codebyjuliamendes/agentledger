@@ -45,3 +45,8 @@ aside{background:#fff!important;color:#58604f!important;border-bottom:1px solid 
 .bottom{background:#f0eee7!important;color:#58604f!important}
 #propose{background:var(--portfolio-accent)!important;color:#fff!important}
 .hero .live{color:#705016!important}.hero p{color:#68675f!important}
+
+
+/* Product mark sizing */
+.brand-logo{display:block;width:100%;height:100%;object-fit:contain}
+.brand-mark:has(.brand-logo),.brand-icon:has(.brand-logo),.logo:has(.brand-logo),.mark:has(.brand-logo){display:grid;place-items:center;overflow:hidden}
