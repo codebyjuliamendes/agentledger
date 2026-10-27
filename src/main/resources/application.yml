@@ -1,0 +1,72 @@
+server:
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
+  compression:
+    enabled: true
+    mime-types: application/json,application/problem+json,text/html,text/css,application/javascript,image/svg+xml
+  error:
+    include-stacktrace: never
+    include-message: never
+  # Set to "framework" or "native" only when running behind a trusted reverse proxy.
+  forward-headers-strategy: ${SERVER_FORWARD_HEADERS_STRATEGY:none}
+  tomcat:
+    max-swallow-size: 64KB
+    max-http-form-post-size: 16KB
+
+spring:
+  application:
+    name: agentledger
+  threads:
+    virtual:
+      enabled: true
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/agentledger}
+    username: ${DATABASE_USERNAME:agentledger}
+    password: ${DATABASE_PASSWORD:agentledger}
+    hikari:
+      maximum-pool-size: ${DATABASE_POOL_SIZE:10}
+  flyway:
+    locations: classpath:db/migration/common,classpath:db/migration/{vendor}
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    default-property-inclusion: always
+  mvc:
+    problemdetails:
+      enabled: true
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          no-cache: true
+
+agentledger:
+  seed-demo-data: ${AGENTLEDGER_SEED_DEMO_DATA:true}
+  http:
+    max-body-bytes: ${AGENTLEDGER_MAX_BODY_BYTES:16384}
+  rate-limit:
+    enabled: ${AGENTLEDGER_RATE_LIMIT_ENABLED:true}
+    capacity: ${AGENTLEDGER_RATE_LIMIT_CAPACITY:30}
+    refill-per-minute: ${AGENTLEDGER_RATE_LIMIT_REFILL_PER_MINUTE:30}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never
+  info:
+    env:
+      enabled: false
+
+logging:
+  structured:
+    format:
+      console: ${LOG_FORMAT:ecs}
+  level:
+    root: INFO

@@ -1,0 +1,12 @@
+.git
+.github
+.idea
+.vscode
+target
+data
+node_modules
+*.md
+.env
+.env.*
+docker-compose.yml
+Dockerfile
