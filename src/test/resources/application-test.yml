@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:agentledger-${random.uuid};MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;DB_CLOSE_DELAY=-1
+    username: sa
+    password: ""
+  flyway:
+    clean-disabled: false
+
+agentledger:
+  seed-demo-data: false
+  rate-limit:
+    enabled: false
+
+logging:
+  structured:
+    format:
+      console: ""
