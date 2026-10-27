@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AgentLedger: approval gate and tamper-evident audit trail for AI agent actions.">
+  <meta name="color-scheme" content="light dark">
+  <title>AgentLedger — action reviews</title>
+  <!-- Applies the saved theme before first paint (external file: the CSP forbids inline scripts). -->
+  <script src="/theme.js"></script>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" type="image/svg+xml" href="/mark-al.svg">
+  <link rel="apple-touch-icon" href="/mark-al.svg">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/">
+        <img class="brand-mark" src="/mark-al.svg" alt="" width="32" height="32">
+        <span class="brand-name">AgentLedger</span>
+      </a>
+      <button type="button" class="icon-button theme-toggle" id="theme-toggle" aria-label="Dark theme" aria-pressed="false">
+        <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+        <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main" class="page" tabindex="-1">
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">Workspace / Action reviews</p>
+        <h1>AgentLedger</h1>
+        <p class="lede">See what your agents want to do. Approve the actions that matter.</p>
+      </div>
+      <div class="head-actions">
+        <button type="button" class="button button-secondary" id="policy-settings">Policy settings</button>
+        <button type="button" class="button button-primary" id="propose"><span aria-hidden="true">＋</span> Propose action</button>
+      </div>
+    </div>
+
+    <section class="hero" aria-labelledby="hero-title">
+      <p class="live"><span class="live-dot" aria-hidden="true"></span> Review policy on</p>
+      <h2 id="hero-title">Give agents room to work.<br><em>Keep humans in control.</em></h2>
+      <p class="hero-copy">Every action gets a risk score, a decision, and a hash-chained audit trail.</p>
+      <p class="integrity" id="integrity" role="status" data-state="loading">Verifying audit chain…</p>
+    </section>
+
+    <section class="stats" aria-label="Summary">
+      <article class="stat"><h2 class="stat-label">Proposed actions</h2><p class="stat-value" id="total">—</p><p class="stat-hint">recorded in this workspace</p></article>
+      <article class="stat stat-attention"><h2 class="stat-label">Needs your review</h2><p class="stat-value" id="pending">—</p><p class="stat-hint">waiting for a decision</p></article>
+      <article class="stat"><h2 class="stat-label">Executed</h2><p class="stat-value" id="executed">—</p><p class="stat-hint">auto-approved or reported (simulated)</p></article>
+      <article class="stat"><h2 class="stat-label">Blocked / denied</h2><p class="stat-value" id="blocked">—</p><p class="stat-hint">policy or human decision</p></article>
+    </section>
+
+    <section class="panel" aria-labelledby="queue-title">
+      <div class="panel-head">
+        <div>
+          <h2 id="queue-title">Action queue</h2>
+          <p>Review the intent, risk, and resource before deciding.</p>
+        </div>
+        <div class="filter">
+          <label for="filter">Show</label>
+          <select id="filter">
+            <option value="all">All actions</option>
+            <option value="pending">Pending</option>
+            <option value="blocked">Blocked</option>
+            <option value="approved">Approved</option>
+            <option value="executed">Executed</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+      </div>
+      <div class="queue-labels" aria-hidden="true">
+        <span>Agent / intent</span><span>Target</span><span>Risk</span><span>Status</span><span>Time</span><span></span>
+      </div>
+      <div id="rows" class="queue" aria-live="polite" aria-busy="true">
+        <p class="state">Loading actions…</p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      AgentLedger <span aria-hidden="true">·</span> Policy-gated actions with an audit trail <span aria-hidden="true">·</span> Demo execution is simulated
+    </footer>
+  </main>
+
+  <dialog id="modal" aria-labelledby="modal-title">
+    <form id="form" class="dialog-body" novalidate>
+      <button type="button" class="icon-button dialog-close" data-close aria-label="Close">×</button>
+      <p class="eyebrow">New action proposal</p>
+      <h2 id="modal-title">What does the agent want to do?</h2>
+      <p class="dialog-lede">The policy engine assigns a risk tier and routes the action.</p>
+      <label>Agent name<input required name="agent" maxlength="300" autocomplete="off" placeholder="e.g. Support Agent"></label>
+      <label>Action<input required name="action" maxlength="300" autocomplete="off" placeholder="e.g. Refund payment"></label>
+      <label>Target resource<input required name="target" maxlength="300" autocomplete="off" placeholder="e.g. payment:pay_123"></label>
+      <label>Reason<textarea required name="reason" rows="3" maxlength="300" placeholder="Why is this action needed?"></textarea></label>
+      <p class="form-error" role="alert" hidden></p>
+      <button class="button button-primary button-block" type="submit">Evaluate &amp; submit</button>
+    </form>
+  </dialog>
+
+  <dialog id="policy-modal" aria-labelledby="policy-title">
+    <form id="policy-form" class="dialog-body" novalidate>
+      <button type="button" class="icon-button dialog-close" data-close aria-label="Close">×</button>
+      <p class="eyebrow">Risk routing policy</p>
+      <h2 id="policy-title">Choose terms that require human review</h2>
+      <p class="dialog-lede">Comma-separated, up to 30 terms of 2–40 characters each. Destructive actions (<span id="critical-terms">delete, drop, remove…</span>) are always blocked by a mandatory rule.</p>
+      <label>Medium risk terms<input name="medium" autocomplete="off" placeholder="refund, payment"></label>
+      <label>High risk terms<input name="high" autocomplete="off" placeholder="export, email, permission"></label>
+      <p class="form-error" role="alert" hidden></p>
+      <button class="button button-primary button-block" type="submit">Save policy</button>
+    </form>
+  </dialog>
+
+  <dialog id="review-modal" aria-labelledby="review-title">
+    <form id="review-form" class="dialog-body" novalidate>
+      <button type="button" class="icon-button dialog-close" data-close aria-label="Close">×</button>
+      <p class="eyebrow">Human review</p>
+      <h2 id="review-title">Approve action</h2>
+      <p class="dialog-lede" id="review-subject"></p>
+      <label>Reviewer<input name="reviewer" maxlength="120" autocomplete="name" placeholder="workspace owner"></label>
+      <label><span id="review-note-label">Note (optional)</span><textarea name="note" rows="3" maxlength="500"></textarea></label>
+      <p class="form-error" role="alert" hidden></p>
+      <button class="button button-primary button-block" type="submit" id="review-submit">Approve</button>
+    </form>
+  </dialog>
+
+  <dialog id="events" aria-labelledby="event-title">
+    <div class="dialog-body">
+      <button type="button" class="icon-button dialog-close" data-close aria-label="Close">×</button>
+      <p class="eyebrow">Audit trail</p>
+      <h2 id="event-title">Action history</h2>
+      <div id="event-list" aria-live="polite"></div>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
