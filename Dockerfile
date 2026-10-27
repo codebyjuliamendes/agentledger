@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.7
 
 # ---- build ----
-FROM eclipse-temurin:21-jdk AS build
+FROM eclipse-temurin:24-jdk AS build
 WORKDIR /workspace
 COPY .mvn/ .mvn/
 COPY mvnw pom.xml ./
@@ -12,7 +12,7 @@ RUN --mount=type=cache,target=/root/.m2 ./mvnw -B -q -DskipTests -Dspotless.chec
  && java -Djarmode=tools -jar target/agentledger.jar extract --layers --launcher --destination target/extracted
 
 # ---- runtime ----
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:24-jre
 RUN apt-get update \
  && apt-get install -y --no-install-recommends curl \
  && rm -rf /var/lib/apt/lists/* \
